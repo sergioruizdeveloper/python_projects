@@ -1,3 +1,6 @@
+## Rutina para transformar archivos Excel en formato xlsx a texto plano csv delimitado por punto y coma(;)
+## Sergio Ruiz - 04-01-2021
+## Temuco - Chile
 ## XLSX a CSV
 import sys, os
 import shutil
