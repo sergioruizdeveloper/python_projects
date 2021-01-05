@@ -7,11 +7,13 @@ import shutil
 import time
 import errno
 import openpyxl
+import dateutil
 from openpyxl import load_workbook
 from datetime import date
 from datetime import datetime
+import datetime
 
-print("-----------------------> PROCESO INICIADO -----> ",datetime.now())
+print("-----------------------> PROCESO INICIADO -----> "+time.strftime("%d/%m/%y %H:%M:%S"))
 
 ## Carpeta principal que se le debe asignar la ruta, lo único que se debe configurar
 ejemplo_dir = 'C:\\Users\\sulky\\workspace\\excel_csv_python\\'
@@ -48,17 +50,26 @@ if(len(archivos)>0):
 
 			## obteniendo los datos de cada hoja del archivo
 			data = sheet.rows
-
+			
 			## creando archivo csv con el nombre de la hoja
 			csv = open(directorio_arch_procesados+"/"+sheetname+".csv", "w+")
 
 			for row in data:
 				l = list(row)
+				
+				## recorre por cantidad de columnas
 				for i in range(len(l)):
+					## Cuando llega al final de la fila, hace un salto de linea
 					if i == len(l) - 1:
 						csv.write(str(l[i].value)+ '\n')
+					## si no, va colocandole el separador
 					else:
-						csv.write(str(l[i].value) + ';')
+						# para los campos con formato fecha, se transforma en formato dd-mm-yyyy
+						if (str(l[i].data_type)) == "d":
+							csv.write(dateutil.parser.parse(str(l[i].value)).strftime('%d-%m-%Y') + ';')
+							# print (dateutil.parser.parse(str(l[i].value)).strftime('%d-%m-%Y'))
+						else:
+							csv.write(str(l[i].value) + ';')
 					csv.write('')
 
 			## cerrando archivo csv
@@ -69,4 +80,4 @@ if(len(archivos)>0):
 else:
 	print("(WARNING!) No se encontraron archivos para procesar")
 
-print("-----------------------> PROCESO FINALIZADO -----> ",datetime.now())
+print("-----------------------> PROCESO FINALIZADO -----> "+time.strftime("%d/%m/%y %H:%M:%S"))
