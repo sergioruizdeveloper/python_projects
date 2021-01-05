@@ -16,7 +16,10 @@ import datetime
 print("-----------------------> PROCESO INICIADO -----> "+time.strftime("%d/%m/%y %H:%M:%S"))
 
 ## Carpeta principal que se le debe asignar la ruta, lo único que se debe configurar
-ejemplo_dir = 'C:\\Users\\sulky\\workspace\\excel_csv_python\\'
+print("Ingrese la ruta donde se encuentran los archivos: \n")
+ejemplo_dir = input()
+
+# ejemplo_dir = 'C:\\Users\\sulky\\workspace\\excel_csv_python\\'
 
 directorio_arch_procesados = ejemplo_dir+'\\procesados'
 excel_revisados = ejemplo_dir+'\\excel_revisados'
@@ -81,3 +84,5 @@ else:
 	print("(WARNING!) No se encontraron archivos para procesar")
 
 print("-----------------------> PROCESO FINALIZADO -----> "+time.strftime("%d/%m/%y %H:%M:%S"))
+print("GRACIAS!")
+gracias = input()
