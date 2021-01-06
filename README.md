@@ -38,7 +38,7 @@ Usamos [Github Desktop](https://desktop.github.com/) para el versionado. Para to
 
 _Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
 
-* **Sergio Ruiz Calful** - *Investigación e Implementación* - [villanuevand](https://github.com/sergioruizdeveloper)
+* **Sergio Ruiz Calful** - *Investigación e Implementación* - [SergioRuizCalful](https://github.com/sergioruizdeveloper)
 
 ## Licencia 📄
 
