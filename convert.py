@@ -1,44 +1,54 @@
 ## Rutina para transformar archivos Excel en formato xlsx a texto plano csv delimitado por punto y coma(;)
+## considera todas las hojas del archivo excel a procesar
 ## Sergio Ruiz - 04-01-2021
-## Temuco - Chile
 ## XLSX a CSV
+
+## importando las librerias necesarias
+## pip install openpyxl
 import sys, os
 import shutil
 import time
 import errno
 import openpyxl
-from openpyxl import load_workbook
 import dateutil
+from dateutil import parser
+from openpyxl import load_workbook
 from datetime import date
 from datetime import datetime
 import datetime
 
 print("-----------------------> PROCESO INICIADO -----> "+time.strftime("%d/%m/%y %H:%M:%S"))
 
-## Carpeta principal que se le debe asignar la ruta, lo único que se debe configurar
+## Pidiendo la ruta donde está el archivo
 print("Ingrese la ruta donde se encuentran los archivos: \n")
 ejemplo_dir = input()
 
-# ejemplo_dir = 'C:\\Users\\sulky\\workspace\\excel_csv_python\\'
+## Pidiendo el delimitador
+print("Ingrese el delimitador de columnas: ")
+delimitador = input()
 
+## Si se quiere determinar una ruta específica
+# ejemplo_dir = 'C:\\Users\\sergio.ruiz.LA.000\\Documents\\STORBOX-IM\\DMS\\SUPPORT\\CS055_BANCOCHILE\\FAQ\\_transformar_excel_csv\\'
+
+## Seteando las rutas donde quedaran los archivos csv y excel procesados
 directorio_arch_procesados = ejemplo_dir+'\\procesados'
 excel_revisados = ejemplo_dir+'\\excel_revisados'
 
-## Creando directorio de archivos procesados si no existe
+## Creando carpeta de archivos procesados si no existe
 if not os.path.isdir(directorio_arch_procesados):
 	os.mkdir(directorio_arch_procesados)
 	print("		#### Carpeta CSV procesados se ha creado")
 
-## Creando directorio de archivos procesados si no existe
+## Creando carpeta de archivos procesados si no existe
 if not os.path.isdir(excel_revisados):
 	os.mkdir(excel_revisados)
 	print("		#### Carpeta Excel revisados se ha creado")
 
-## Guardando en un arreglo los archivos encontrados
+## Guardando en un arreglo los archivos encontrados que cumplan las condiciones
 with os.scandir(ejemplo_dir) as archivos:
     archivos = [fichero.name for fichero in archivos if fichero.is_file() and (fichero.name.endswith('.xlsx') or fichero.name.endswith('.XLSX'))]
 
-## Valida si existen archivos para procesar
+## Validando si existen archivos para procesar
 if(len(archivos)>0):
 	## Procesando cada uno de los archivos encontrados
 	for x in archivos:
@@ -69,10 +79,9 @@ if(len(archivos)>0):
 					else:
 						# para los campos con formato fecha, se transforma en formato dd-mm-yyyy
 						if (str(l[i].data_type)) == "d":
-							csv.write(dateutil.parser.parse(str(l[i].value)).strftime('%d-%m-%Y') + ';')
-							# print (dateutil.parser.parse(str(l[i].value)).strftime('%d-%m-%Y'))
+							csv.write(dateutil.parser.parse(str(l[i].value)).strftime('%d-%m-%Y') + delimitador)
 						else:
-							csv.write(str(l[i].value) + ';')
+							csv.write(str(l[i].value) + delimitador)
 					csv.write('')
 
 			## cerrando archivo csv
@@ -84,5 +93,5 @@ else:
 	print("(WARNING!) No se encontraron archivos para procesar")
 
 print("-----------------------> PROCESO FINALIZADO -----> "+time.strftime("%d/%m/%y %H:%M:%S"))
-print("GRACIAS!")
+print("Presione cualquier tecla para salir")
 gracias = input()
