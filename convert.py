@@ -19,20 +19,21 @@ import datetime
 
 print("-----------------------> PROCESO INICIADO -----> "+time.strftime("%d/%m/%y %H:%M:%S"))
 
+cont = 1
 ## Pidiendo la ruta donde está el archivo
 print("Ingrese la ruta donde se encuentran los archivos: \n")
-ejemplo_dir = input()
+ruta_origen = input()
 
 ## Pidiendo el delimitador
 print("Ingrese el delimitador de columnas: ")
 delimitador = input()
 
 ## Si se quiere determinar una ruta específica
-# ejemplo_dir = 'C:\\Users\\sergio.ruiz.LA.000\\Documents\\STORBOX-IM\\DMS\\SUPPORT\\CS055_BANCOCHILE\\FAQ\\_transformar_excel_csv\\'
+# ruta_origen = 'C:\\Users\\sergio.ruiz.LA.000\\Documents\\STORBOX-IM\\DMS\\SUPPORT\\CS055_BANCOCHILE\\FAQ\\_transformar_excel_csv\\'
 
 ## Seteando las rutas donde quedaran los archivos csv y excel procesados
-directorio_arch_procesados = ejemplo_dir+'\\procesados'
-excel_revisados = ejemplo_dir+'\\excel_revisados'
+directorio_arch_procesados = ruta_origen+'\\procesados'
+excel_revisados = ruta_origen+'\\excel_revisados'
 
 ## Creando carpeta de archivos procesados si no existe
 if not os.path.isdir(directorio_arch_procesados):
@@ -45,17 +46,18 @@ if not os.path.isdir(excel_revisados):
 	print("		#### Carpeta Excel revisados se ha creado")
 
 ## Guardando en un arreglo los archivos encontrados que cumplan las condiciones
-with os.scandir(ejemplo_dir) as archivos:
+with os.scandir(ruta_origen) as archivos:
     archivos = [fichero.name for fichero in archivos if fichero.is_file() and (fichero.name.endswith('.xlsx') or fichero.name.endswith('.XLSX'))]
+
+# print('Los Archivos encontrados: '+str(archivos))
 
 ## Validando si existen archivos para procesar
 if(len(archivos)>0):
 	## Procesando cada uno de los archivos encontrados
 	for x in archivos:
 		filename = x
-
 		## Abriendo el archivo xlsx
-		xlsx = openpyxl.load_workbook(filename)
+		xlsx = openpyxl.load_workbook(ruta_origen+'\\'+filename)
 
 		##Muestra las hojas del archivo excel
 		for sheetname in xlsx.sheetnames:
@@ -65,7 +67,7 @@ if(len(archivos)>0):
 			data = sheet.rows
 			
 			## creando archivo csv con el nombre de la hoja
-			csv = open(directorio_arch_procesados+"/"+sheetname+".csv", "w+")
+			csv = open(directorio_arch_procesados+"/"+str(cont)+"_"+sheetname+".csv", "w+")
 
 			for row in data:
 				l = list(row)
@@ -87,11 +89,12 @@ if(len(archivos)>0):
 			## cerrando archivo csv
 			csv.close()
 		# Mueve el archivo a la carpeta de excel revisados
-		print("		#### Moviendo archivo"+filename+" a la carpeta de revisados")
-		shutil.move(filename, excel_revisados)
+		print("		#### Moviendo archivo: \n"+filename+" a la carpeta de revisados")
+		shutil.move(ruta_origen+'\\'+filename, excel_revisados)
+		cont = cont + 1
 else:
 	print("(WARNING!) No se encontraron archivos para procesar")
 
 print("-----------------------> PROCESO FINALIZADO -----> "+time.strftime("%d/%m/%y %H:%M:%S"))
-print("Presione cualquier tecla para salir")
+print("Presione enter para salir")
 gracias = input()
